@@ -1,0 +1,92 @@
+@s: 0.0133rem;
+.mch-list{
+    color: #2E3141;
+    background: #F8F8FC;
+    .top{
+        position: relative;
+        height: 100*@s;
+        background: #fff;
+        padding: 0 30*@s;
+        border-bottom: 1px solid #ddd;
+        img{
+            position: absolute;
+            top: 25*@s;
+            width: 50*@s;
+            height: 50*@s;
+        }
+        .title{
+            text-align: center;
+            font-size: 36*@s;
+            color: #2E3141; 
+            line-height: 100*@s;
+            font-weight: bold;
+        }
+    }
+    .search{
+        height: 100*@s;
+        display: flex;
+        align-items: center;
+        background: #fff;
+        padding: 0 30*@s;
+        input{
+            flex: 1;
+            height: 60*@s;
+            line-height: 60@s;
+            padding-left: 30*@s;
+            font-size: 28*@s;
+            border-radius: 30*@s;
+            background: #F8F8FC;
+        }
+        .search-btn{
+            margin-left: 30*@s;
+            font-size: 28*@s;
+            color: #2E3141;
+        }
+    }
+    .item{
+        margin-top: 20*@s;
+        font-size: 28*@s;
+        background: #fff;
+        padding: 0 30*@s;
+        .item-head{
+            display: flex;
+            align-items: center;
+            height: 100*@s;
+            font-size: 32*@s;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+            .item-title{
+                flex: 1;
+            }
+            .item-state{
+                color: #0DB09B;
+            }
+        }
+        .content{
+            padding-bottom: 30*@s;
+            border-bottom: 1px solid #ddd;
+            .detail{
+                margin-top: 30*@s;
+                overflow: hidden;
+                span{
+                    float: right;
+                }
+            }
+        }
+        .foot{
+            height: 90*@s;
+            line-height: 90*@s;
+            text-align: right;
+            .foot-btn{
+                border: 1px solid #0DB09B;
+                color: #0DB09B;
+                margin-left: 30*@s;
+                border-radius: 25*@s;
+                height: 50*@s;
+                line-height: 50*@s;
+                display: inline-block;
+                padding: 0 30*@s;
+            }
+        }
+    }
+}

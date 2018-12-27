@@ -3,7 +3,7 @@ ul,ol{list-style:none;}
 a{text-decoration:none;}
 html{-ms-text-size-adjust:none;-webkit-text-size-adjust:none;text-size-adjust:none;}
 body{line-height:1.5; font-size:14px;}
-body,button,input,select,textarea{font-family:'helvetica neue',tahoma,'hiragino sans gb',stheiti,'wenquanyi micro hei',\5FAE\8F6F\96C5\9ED1,\5B8B\4F53,sans-serif;}
+body,button,input,select,textarea{font-family:'PingFangSC-Medium','helvetica neue',tahoma,'hiragino sans gb',stheiti,'wenquanyi micro hei',\5FAE\8F6F\96C5\9ED1,\5B8B\4F53,sans-serif;}
 b,strong{font-weight:bold;}
 i,em{font-style:normal;}
 table{border-collapse:collapse;border-spacing:0;}
@@ -17,6 +17,7 @@ input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0;}
 input[type="search"]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box;}
 input[type="search"]::-webkit-search-decoration{-webkit-appearance:none;}
 input:focus{outline:none;}
+input{border:none}
 select[size],select[multiple],select[size][multiple]{border:1px solid #AAA;padding:0;}
 article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block;}
 audio,canvas,video,progress{display:inline-block;}

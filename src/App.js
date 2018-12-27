@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import './app.less'
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-      abc
+        {this.props.children}
       </div>
     );
   }

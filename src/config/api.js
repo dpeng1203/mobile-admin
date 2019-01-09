@@ -60,6 +60,9 @@ export const statsTotal = p => myGet('/stats/total',{params: p})
 // 补单
 export const reissue = p => myPost('/bill/reissue', p);
 
+//回滚
+export const rollback = p => myPost('/bill/reissue/rollback', p);
+
 //激活、冻结商户
 export const cutMchState = p => myPost('/mch', p);
 
@@ -101,4 +104,7 @@ export const payBankList = p => myGet('/bank/payment/sys',{params: p})
 
 //改变代付状态
 export const changePayBankState = p => myPost('/bank/payment/sys',p)
+
+//审核通过
+export const auditPass = p => myPost('/user/base/audit', p);
 

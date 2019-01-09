@@ -23,7 +23,9 @@ axios.interceptors.request.use(
     // config.headers.pid = '30478fdd494233eb22a0b6dabc12f41e'
     // config.headers.timestamp=Date.parse(new Date())
     // config.headers.sign=hex_md5(config.headers.timestamp+config.headers.pid+ "321652e390b5fe2b7cb1d9ce34d50e51")
-    config.baseURL = 'http://116.62.209.131:8088'
+    config.baseURL = 'http://116.62.209.131:8088'   //测试
+    // config.baseURL = 'http://47.99.180.135:8088'   //测试
+
     return config
   },
   err => {

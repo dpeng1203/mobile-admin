@@ -14,9 +14,9 @@ export default class Home extends Component{
         loginOut().then((res) => {
             Toast.success('退出成功!!!')
             localStorage.clear()
-            // this.props.history.push("/login")
+            this.props.history.push("/login")
         }, (err) => {
-            // this.props.history.push("/login")
+            this.props.history.push("/login")
         })
     }
 
@@ -37,22 +37,22 @@ export default class Home extends Component{
                             <img src={require("../../resource/img/ic_potential_business.png")} alt="" />
                             <p>商户管理</p>
                         </Link>
-                        <div className="item">
+                        <Link to='/billList' className="item">
                             <img src={require("./../../resource/img/ic_new_business.png")} alt="" />
                             <p>交易管理</p>
-                        </div>
-                        <div className="item">
+                        </Link>
+                        <Link to='/sysList' className="item">
                             <img src={require("./../../resource/img/ic_business_list.png")} alt="" />
                             <p>产品管理</p>
-                        </div>
+                        </Link>
                         <div className="item">
                             <img src={require("./../../resource/img/ic_data.png")} alt="" />                            
                             <p>数据</p>
                         </div>
-                        <div className="item">
+                        <Link to='/cashList' className="item">
                             <img src={require("./../../resource/img/ic_change_password.png")} alt="" />                            
                             <p>提现管理</p>
-                        </div>
+                        </Link>
                         <div className="item">
                             <img src={require("./../../resource/img/ic_home_xiaoxi.png")} alt="" /> 
                             <p>代理管理</p>

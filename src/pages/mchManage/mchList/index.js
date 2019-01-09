@@ -13,42 +13,61 @@ export default class MchList extends Component{
             limit: 10
         }
     }
-
+    
     componentWillMount() {
-        // console.log(document.body.scrollHeight)
-        // console.log(document.documentElement.scrollTop)
         this.getMerList()
         this.bindEvents()
     }
 
+    componentWillUnmount = () => {
+        window.removeEventListener('scroll',this.changeScroll)
+    }
+
     bindEvents() {
-        window.addEventListener('scroll',() => {
-            console.log(window.screen.availHeight)
-            console.log(document.body.scrollHeight)
-            console.log(document.documentElement.scrollTop)
-            if(window.screen.availHeight + document.documentElement.scrollTop + 100 > document.body.scrollHeight) {
-                if(this.state.loading) {
+        window.addEventListener('scroll',this.changeScroll)
+    }
+
+    changeScroll = () => {
+        if(window.screen.availHeight + document.documentElement.scrollTop + 100 > document.body.scrollHeight) {
+            if(this.state.loading) {
+                this.setState({
+                    loading: false
+                })
+                setTimeout( ()=>{
+                    let data = this.state.data
+                    data.offset = data.offset+data.limit
                     this.setState({
-                        loading: false
+                        data
                     })
-                    setTimeout( ()=>{
-                        let data = this.state.data
-                        data.offset = data.offset+data.limit
-                        this.setState({
-                            data
-                        })
-                        this.getMerList()
-                        
-                    },600)
-                }
-                
-                
+                    this.getMerList()
+                    
+                },600)
             }
-        })
+        }
     }
 
     handleBack = () => {
-        this.props.history.goBack()
+        this.props.history.push('/home')
+    }
+
+    handleMchName = (e) => {
+        let data = this.state.data
+        data.mch_name = e.target.value
+        this.setState({
+            data
+        })
+    }
+
+    seachMch = () => {
+        this.setState({
+            dataList: []
+        })
+        this.getMerList()
+    }
+
+
+    toMchDetail(id) {
+        this.props.history.push({ pathname : '/mchDetail',query: { mch_id: id} })
     }
 
     getMerList = () => {
@@ -96,8 +115,11 @@ export default class MchList extends Component{
                     <div className="title" id="demo">商户列表</div>
                 </div>
                 <div className="search">
-                    <input placeholder="商户名称" type="text" ></input>
-                    <div className="search-btn">搜索</div>
+                    <input placeholder="商户名称" type="text" 
+                        value = {this.state.data.mch_name || ''}
+                        onChange = {this.handleMchName}
+                    ></input>
+                    <div className="search-btn" onClick={this.seachMch}>搜索</div>
                 </div>
                 { this.state.dataList.map( item =>{
                     return <div className="item" key={item.mch_id}>
@@ -112,8 +134,8 @@ export default class MchList extends Component{
                         <div className="detail">通道<span>{item.channel_name}</span></div>
                     </div>
                     <div className="foot">
-                        <div className="foot-btn">详情</div>
-                        <div className="foot-btn">{item.mch_state==="enable"?'冻结':'激活'}</div>
+                        <div className="foot-btn" onClick={() => this.toMchDetail(item.mch_id)}>详情</div>
+                        {/* <div className="foot-btn">{item.mch_state==="enable"?'冻结':'激活'}</div> */}
                     </div>
                 </div>
                 }) }

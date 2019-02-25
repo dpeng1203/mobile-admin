@@ -59,8 +59,10 @@ export default class MchList extends Component{
     }
 
     seachMch = () => {
+        let data = this.state.data
+        data.offset = 0
         this.setState({
-            dataList: []
+            data
         })
         this.getMerList()
     }
@@ -68,6 +70,10 @@ export default class MchList extends Component{
 
     toMchDetail(id) {
         this.props.history.push({ pathname : '/mchDetail',query: { mch_id: id} })
+    }
+
+    toChangeChannel(item) {
+        this.props.history.push({ pathname : '/changeChannel',query: { item: item} })
     }
 
     getMerList = () => {
@@ -91,16 +97,22 @@ export default class MchList extends Component{
                     ele.audit_state = '审核失败'
                 }
             })
-            if(dataList.length < 10) {
+            if(this.state.data.offset === 0) {
                 this.setState({
-                    dataList: this.state.dataList.concat(dataList),
-                    loading: false
+                    dataList
                 })
             }else{
-                this.setState({
-                    dataList: this.state.dataList.concat(dataList),
-                    loading: true
-                })
+                if(dataList.length < 10) {
+                    this.setState({
+                        dataList: this.state.dataList.concat(dataList),
+                        loading: false
+                    })
+                }else{
+                    this.setState({
+                        dataList: this.state.dataList.concat(dataList),
+                        loading: true
+                    })
+                }
             }
             
         })
@@ -135,6 +147,7 @@ export default class MchList extends Component{
                     </div>
                     <div className="foot">
                         <div className="foot-btn" onClick={() => this.toMchDetail(item.mch_id)}>详情</div>
+                        <div className="foot-btn" onClick={() => this.toChangeChannel(item)}>切换通道</div>
                         {/* <div className="foot-btn">{item.mch_state==="enable"?'冻结':'激活'}</div> */}
                     </div>
                 </div>

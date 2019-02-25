@@ -5,15 +5,24 @@ import { changeSysApp } from '../../../config/api'
 
 export default class ChangeSys extends Component {
 
-    state={
-        name: this.props.location.query.data.app_name,
-        rate: this.props.location.query.data.rate,
-        status: this.props.location.query.data.status==='开启'?true:false
+    constructor(props) {
+        super(props)
+        let data = props.location.query.data
+        this.state={
+            id: data.id,
+            app_name: data.app_name,
+            rate: data.rate,
+            status: data.status==='开启'?true:false
+        }
     }
 
+    
+
     handleChange = () => {
+        let data = this.state
+        data.rate = data.rate*100
         changeSysApp(this.state).then( res => {
-            Toast('修改成功！！',1)
+            Toast.success('修改成功！！',1)
             this.props.history.push('/sysList')
        })
     }
@@ -21,7 +30,7 @@ export default class ChangeSys extends Component {
     changeValue = (event) => {
         if(event.target.name === "name") {
             this.setState({
-                name: event.target.value
+                app_name: event.target.value
             })
         }
         if(event.target.name === "rate") {
@@ -43,7 +52,7 @@ export default class ChangeSys extends Component {
             <div className="content">
                 <div className="wrapper">
                     <div className="name">应用名称：</div>
-                    <input type="text" value={this.state.name} name="name" onChange={this.changeValue}/>
+                    <input type="text" value={this.state.app_name} name="name" onChange={this.changeValue}/>
                 </div>
                 <div className="wrapper">
                     <div className="name">费率：</div>

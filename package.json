@@ -1,5 +1,4 @@
 {
-  "proxy": "http://116.62.209.131:8088",
   "name": "mobile-admin",
   "version": "0.1.0",
   "private": true,

@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 import './index.less'
-import { billList,reissue,rollback } from '../../../config/api'
+import { payList } from '../../../config/api'
 import canverterDate from '../../../utils/canverterDate'
-import { Modal,Toast } from 'antd-mobile';
 
-const alert = Modal.alert;
 
-export default class BillList extends Component{
+export default class PayList extends Component{
 
     state = {
         dataList: [],
@@ -73,49 +71,9 @@ export default class BillList extends Component{
 
 
     toMchDetail(item) {
-        this.props.history.push({ pathname: '/billDetail',query: { data: item} })
+        this.props.history.push({ pathname: '/payDetail',query: { data: item} })
     }
 
-    // 补单
-    handleClickReissue(row) {
-        alert('补单', '确定补单吗???', [
-            { text: 'Cancel', onPress: () => console.log('cancel') },
-            { text: 'Ok', onPress: () => {
-                let data = {
-                    sys_order_id: row.sys_order_id
-                }
-                reissue(data).then( res => {
-                    Toast.success('补单成功!!!', 1)
-                    let data = this.state.data
-                    data.offset = 0
-                    this.setState({
-                        data
-                    })
-                    this.getList()
-                })
-            } },
-          ])
-    }
-    //回滚
-    handleClickRollback(row) {
-        alert('回滚', '确定回滚吗???', [
-            { text: 'Cancel', onPress: () => console.log('cancel') },
-            { text: 'Ok', onPress: () => {
-                let data = {
-                    sys_order_id: row.sys_order_id
-                }
-                rollback(data).then( res => {
-                    Toast.success('回滚成功!!!', 1)
-                    let data = this.state.data
-                    data.offset = 0
-                    this.setState({
-                        data
-                    })
-                    this.getList()
-                })
-            } },
-        ])
-    }
     
 
     getList = () => {
@@ -125,14 +83,14 @@ export default class BillList extends Component{
                 delete data[key]
             }
         }
-        billList(data).then((res) => {
+        payList(data).then((res) => {
             let dataList = res.data.data_list
             dataList.forEach( ele => {
                 if(ele.money && ele.money !== '') {
                     ele.money = ele.money/100
                 }
-                if(ele.mch_charge && ele.mch_charge !== '') {
-                    ele.mch_charge = ele.mch_charge/100
+                if(ele.charge_money && ele.charge_money !== '') {
+                    ele.charge_money = ele.charge_money/100
                 }
                 if( ele.create_time ) {
                     ele.create_time = canverterDate(ele.create_time)
@@ -140,18 +98,31 @@ export default class BillList extends Component{
                 if( ele.trade_time ) {
                     ele.trade_time = canverterDate(ele.trade_time)
                 }
-                if(ele.state === 1) {
-                    ele.state = '待支付'
-                }else if(ele.state === 2) {
-                    ele.state = '交易进行中'
-                }else if(ele.state === 3) {
-                    ele.state = '交易成功'
-                }else if(ele.state === 4) {
-                    ele.state = '交易失败'
-                }else if(ele.state === 9) {
-                    ele.state = '超时关闭'
+                if(ele.status === 1) {
+                    ele.status = '新订单'
+                }else if(ele.status === 2) {
+                    ele.status = '进行中'
+                }else if(ele.status === 3) {
+                    ele.status = '交易成功'
+                }else if(ele.status === 4) {
+                    ele.status = '交易失败'
                 }else{
-                    ele.state = '状态异常'
+                    ele.status = '状态异常'
+                }
+                if(ele.pay_type && ele.pay_type === 1) {
+                    ele.pay_type = '对私'
+                } else if(ele.pay_type === 2) {
+                    ele.pay_type = '对公'
+                }
+                if(ele.charge_type && ele.charge_type === 1) {
+                    ele.charge_type = '定额'
+                } else if(ele.charge_type === 2) {
+                    ele.charge_type = '百分比'
+                }
+                if(ele.bank_payment_id && ele.bank_payment_id === 1) {
+                    ele.bank_payment_id = '平安'
+                }else if(ele.bank_payment_id === 2) {
+                    ele.bank_payment_id = '先锋'
                 }
             })
             if(this.state.data.offset === 0) {
@@ -178,10 +149,10 @@ export default class BillList extends Component{
 
     render() {
         return(
-            <div className="bill-list">
+            <div className="pay-list">
                 <div className="top">
                     <img src={require('../../../resource/img/ic_back.png')} alt="" onClick={this.handleBack}></img>
-                    <div className="title" id="demo">交易列表</div>
+                    <div className="title" id="demo">代付列表</div>
                 </div>
                 <div className="search">
                     <input placeholder="请输入商户号" type="text" 
@@ -193,21 +164,18 @@ export default class BillList extends Component{
                 { this.state.dataList.map( item =>{
                     return <div className="item" key={item.mch_order_id}>
                     <div className="item-head">
-                        <div className="item-title">{item.mch_name}</div>
-                        <div className="item-state">{item.state }</div>
+                        <div className="item-title">{item.acc_name}</div>
+                        <div className="item-state">{item.status }</div>
                     </div>
                     <div className="content">
-                        {/* <div className="detail">手机号<span>{item.phone}</span></div> */}
                         <div className="detail">交易金额<span>{item.money}</span></div>
-                        <div className="detail">手续费<span>{item.mch_charge}</span></div>
-                        <div className="detail">通道<span>{item.channel}</span></div>
-                        <div className="detail">支付类型<span>{item.pay_type}</span></div>
+                        <div className="detail">手续费<span>{item.charge_money}</span></div>
+                        <div className="detail">通道<span>{item.bank_payment_id}</span></div>
+                        <div className="detail">代付类型<span>{item.pay_type}</span></div>
                         <div className="detail">创建时间<span>{item.create_time}</span></div>
                     </div>
                     <div className="foot">
                         <div className="foot-btn" onClick={() => this.toMchDetail(item)}>详情</div>
-                        {item.state === '待支付' || item.state === '超时关闭' ? <div className="foot-btn" onClick={() => this.handleClickReissue(item)}>补单</div> : null}
-                        {item.super_order_id && item.super_order_id.indexOf('unknown') === 0 ? <div className="foot-btn rollback" onClick={() => this.handleClickRollback(item)}>回滚</div> : null}
                     </div>
                 </div>
                 }) }

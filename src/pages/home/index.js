@@ -21,11 +21,11 @@ export default class Home extends Component{
 
     handleOut = () => {
         loginOut().then((res) => {
-            Toast.success('退出成功!!!')
+            Toast.success('退出成功!!!',1)
             localStorage.clear()
-            this.props.history.push("/login")
+            this.props.history.push("/")
         }, (err) => {
-            this.props.history.push("/login")
+            this.props.history.push("/")
         })
     }
 

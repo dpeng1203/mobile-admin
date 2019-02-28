@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './index.less'
 import { merList } from '../../../config/api'
+import { Pagination } from 'antd-mobile';
 
 export default class MchList extends Component{
 
@@ -8,15 +9,16 @@ export default class MchList extends Component{
         dataList: [],
         loading: true,
         data: {
-            mch_name: '',
+            mch_id: '',
             offset: 0,
             limit: 10
-        }
+        },
+        total: null,
     }
     
     componentWillMount() {
         this.getMerList()
-        this.bindEvents()
+        // this.bindEvents()
     }
 
     componentWillUnmount = () => {
@@ -52,9 +54,9 @@ export default class MchList extends Component{
 
     handleMchName = (e) => {
         let data = this.state.data
-        data.mch_name = e.target.value
+        data.mch_id = e.target.value
         this.setState({
-            data
+            data,
         })
     }
 
@@ -75,6 +77,34 @@ export default class MchList extends Component{
     toChangeChannel(item) {
         this.props.history.push({ pathname : '/changeChannel',query: { item: item} })
     }
+    //回到第一页
+    handleFirst = () => {
+        let data = this.state.data
+        data.offset = 0
+        this.setState({
+            data
+        })
+        this.getMerList()
+    }
+
+    changeCurrent = (value) => {
+        let data = this.state.data
+        data.offset = (value-1)*10
+        this.setState({
+            data
+        })
+        this.getMerList()
+    }
+
+    //回到尾页
+    handleEnd = () => {
+        let data = this.state.data
+        data.offset = (this.state.total-1)*10
+        this.setState({
+            data
+        })
+        this.getMerList()
+    }
 
     getMerList = () => {
         let data = this.state.data
@@ -85,6 +115,7 @@ export default class MchList extends Component{
         }
         merList(data).then((res) => {
             let dataList = res.data.data_list
+            let total = Math.ceil(res.data.total_count/10) 
             dataList.forEach( ele => {
                 if(ele.money) {
                     ele.money = ele.money/100
@@ -97,23 +128,30 @@ export default class MchList extends Component{
                     ele.audit_state = '审核失败'
                 }
             })
-            if(this.state.data.offset === 0) {
-                this.setState({
-                    dataList
-                })
-            }else{
-                if(dataList.length < 10) {
-                    this.setState({
-                        dataList: this.state.dataList.concat(dataList),
-                        loading: false
-                    })
-                }else{
-                    this.setState({
-                        dataList: this.state.dataList.concat(dataList),
-                        loading: true
-                    })
-                }
-            }
+            this.setState({
+                dataList,
+                total
+            })
+            // if(this.state.data.offset === 0) {
+            //     this.setState({
+            //         dataList,
+            //         total
+            //     })
+            // }else{
+            //     if(dataList.length < 10) {
+            //         this.setState({
+            //             dataList: this.state.dataList.concat(dataList),
+            //             loading: false,
+            //             total
+            //         })
+            //     }else{
+            //         this.setState({
+            //             dataList: this.state.dataList.concat(dataList),
+            //             loading: true,
+            //             total
+            //         })
+            //     }
+            // }
             
         })
     }
@@ -128,7 +166,7 @@ export default class MchList extends Component{
                 </div>
                 <div className="search">
                     <input placeholder="商户名称" type="text" 
-                        value = {this.state.data.mch_name || ''}
+                        value = {this.state.data.mch_id || ''}
                         onChange = {this.handleMchName}
                     ></input>
                     <div className="search-btn" onClick={this.seachMch}>搜索</div>
@@ -152,6 +190,18 @@ export default class MchList extends Component{
                     </div>
                 </div>
                 }) }
+                <div className="pagination-wrapper">
+                    <div className="first" onClick={this.handleFirst}>首页</div>
+                    <div className="wrapper">
+                        <Pagination 
+                            total={this.state.total} 
+                            current={this.state.data.offset/10 + 1} 
+                            locale={{prevText: '<',nextText: '>',}}
+                            onChange={this.changeCurrent} 
+                        />
+                    </div>
+                    <div className="first" onClick={this.handleEnd}>尾页</div>
+                </div>
                 
             </div>
         )

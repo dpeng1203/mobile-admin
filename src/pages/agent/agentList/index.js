@@ -158,7 +158,7 @@ export default class AgentList extends Component {
                         onChange = {this.handleMchName}
                     ></input>
                     <div className="search-btn" onClick={this.seachMch}>搜索</div>
-                    <img src={require('../../../resource/img/ic_add.png')} alt="" onClick={this.add}></img>
+                    {/* <img src={require('../../../resource/img/ic_add.png')} alt="" onClick={this.add}></img> */}
                     
                 </div>
                 { this.state.dataList.map( item =>{
